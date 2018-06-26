@@ -5,10 +5,9 @@ let time;
 let timerStart;
 
 // Enemies our player must avoid
-let Enemy = function(sprite, x, y, speed) {
+let Enemy = function(x, y, speed) {
     // Variables applied to each of our instances go here,
-
-    this.sprite = sprite;
+    this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
 
@@ -18,6 +17,10 @@ let Enemy = function(sprite, x, y, speed) {
     // Parameter: dt, a time delta between ticks
     this.update = (dt) => {
         this.x += this.speed * dt;
+
+        if(this.x > 450){
+            this.x = 0;
+        }
     }
 
     // Draw the enemy on the screen, required method for game
@@ -26,10 +29,9 @@ let Enemy = function(sprite, x, y, speed) {
     }
 
     this.checkCollisions = () => {
-        console.log(player.x, player.y, this.x, this.y);
-        if(this.x === player.x && this.y === player.y){
-            player.x = 200;
-            player.y = 400;
+        if(parseInt(this.x) === player.x && parseInt(this.y) === player.y){
+            console.log('test');
+            player.reset();
         }
     }
 };
@@ -49,34 +51,30 @@ let Player = function(sprite, x, y) {
 
     this.handleInput = (key) => {
         if(key === 'left' && this.x > 0 ){
-            this.x -= 50;
+            this.x -= 40;
         }else if(key === 'right' && this.x < 400){
-            this.x += 50;
+            this.x += 40;
         }else if(key === 'up' && this.y > 0){
-            this.y -= 50;
+            this.y -= 40;
 
             if(this.y < 40){
                 this.reset();
             }
         }else if(key === 'down' && this.y < 400){
-            this.y += 50;
+            this.y += 40;
         }
     }
 
     this.reset = () => {
         this.x = 200;
-        this.y = 400;
+        this.y = 340;
     }
 }
 
-
 // Place all enemy objects in an array called allEnemies
-let bug1 = new Enemy('images/enemy-bug.png', 300, 150, 1);
-let bug2 = new Enemy('images/enemy-bug.png', 200, 200, 1);
-let bug3 = new Enemy('images/enemy-bug.png', 60, 50, 1);
-let allEnemies = [bug1, bug2, bug3];
+let allEnemies = [new Enemy(320, 220, 60), new Enemy(120, 140, 60), new Enemy(40, 60, 60)];
 // Place the player object in a variable called player
-let player = new Player('images/char-boy.png', 200, 400);
+let player = new Player('images/char-cat.png', 200, 340);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
