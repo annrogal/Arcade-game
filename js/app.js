@@ -5,32 +5,34 @@ let time;
 let timerStart;
 
 // Enemies our player must avoid
-let Enemy = function(sprite, x, y) {
+let Enemy = function(sprite, x, y, speed) {
     // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
 
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = sprite;
     this.x = x;
     this.y = y;
 
+    this.speed = speed;
+
     // Update the enemy's position, required method for game
     // Parameter: dt, a time delta between ticks
     this.update = (dt) => {
-
+        this.x += this.speed * dt;
     }
 
     // Draw the enemy on the screen, required method for game
     this.render = () => {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
+
+    this.checkCollisions = () => {
+        console.log(player.x, player.y, this.x, this.y);
+        if(this.x === player.x && this.y === player.y){
+            player.x = 200;
+            player.y = 400;
+        }
+    }
 };
-
-
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
 
 let Player = function(sprite, x, y) {
     this.sprite = sprite;
@@ -38,40 +40,43 @@ let Player = function(sprite, x, y) {
     this.y = y;
 
     this.update = () => {
-        console.log("a");
+       
     }
 
     this.render = () => {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
-    this.handleInput = () => {
+    this.handleInput = (key) => {
+        if(key === 'left' && this.x > 0 ){
+            this.x -= 50;
+        }else if(key === 'right' && this.x < 400){
+            this.x += 50;
+        }else if(key === 'up' && this.y > 0){
+            this.y -= 50;
 
+            if(this.y < 40){
+                this.reset();
+            }
+        }else if(key === 'down' && this.y < 400){
+            this.y += 50;
+        }
+    }
+
+    this.reset = () => {
+        this.x = 200;
+        this.y = 400;
     }
 }
 
 
-//Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-//};
-
-
-
-
-
-
-// Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-let bug1 = new Enemy('images/enemy-bug.png', 300, 140);
-let bug2 = new Enemy('images/enemy-bug.png', 200, 230);
-let bug3 = new Enemy('images/enemy-bug.png', 60, 60);
+let bug1 = new Enemy('images/enemy-bug.png', 300, 150, 1);
+let bug2 = new Enemy('images/enemy-bug.png', 200, 200, 1);
+let bug3 = new Enemy('images/enemy-bug.png', 60, 50, 1);
 let allEnemies = [bug1, bug2, bug3];
 // Place the player object in a variable called player
 let player = new Player('images/char-boy.png', 200, 400);
-
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
