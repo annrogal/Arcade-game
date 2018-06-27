@@ -28,8 +28,9 @@ let Enemy = function(x, y, speed) {
         if(parseInt(this.x) === player.x && parseInt(this.y) === player.y){
             console.log('test');
             player.reset();
-            allLife.popLife();
+            allLife.pop();
             score.oddScores();
+            player.gameOver();
         }
     }
 };
@@ -43,6 +44,36 @@ let Player = function(sprite, x, y) {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 
+    this.gameOver = () => {
+        if(allLife.length !== 0) return;
+
+        swal({
+            title: "Game over!",
+            text: "You lose all life",
+            type: "error",
+            confirmButtonText: "Play again!"
+        }).then(function(isConfirm) {
+            if (isConfirm) {
+                window.location.reload(true);
+            }     
+        })
+    }
+
+    this.gameWin = () => {
+        if(scores !== 500) return;
+
+        swal({
+            title: "Congratulations!",
+            text: "You earnd 500 scores",
+            type: "success",
+            confirmButtonText: "Play again!"
+        }).then(function(isConfirm) {
+            if (isConfirm) {
+                window.location.reload(true);
+            }     
+        })  
+    }
+
     this.handleInput = (key) => {
         if(key === 'left' && this.x > 0 ){
             this.x -= 40;
@@ -53,6 +84,7 @@ let Player = function(sprite, x, y) {
 
             if(this.y < 40){
                 scores += 100;
+                player.gameWin();
                 this.reset();
             }
         }else if(key === 'down' && this.y < 400){
@@ -94,10 +126,6 @@ let Life = function(x,y){
 
     this.render = () => {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 28, 42);
-    }
-
-    this.popLife = () => {
-        allLife.pop();
     }
 }
 
