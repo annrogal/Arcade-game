@@ -1,9 +1,3 @@
-const timer = document.getElementById('timer');
-let seconds = 0;
-let minutes = 0;
-let time;
-let timerStart;
-
 let scores = 0;
 
 // Enemies our player must avoid
@@ -34,6 +28,8 @@ let Enemy = function(x, y, speed) {
         if(parseInt(this.x) === player.x && parseInt(this.y) === player.y){
             console.log('test');
             player.reset();
+            allLife.popLife();
+            score.oddScores();
         }
     }
 };
@@ -70,7 +66,7 @@ let Player = function(sprite, x, y) {
     }
 }
 
-var Score = function(x, y){
+let Score = function(x, y){
     this.x = x;
     this.y = y;
     this.score = `Points: ${scores}`;
@@ -83,6 +79,26 @@ var Score = function(x, y){
     this.update = () => {
         this.score = `Points: ${scores}`;
     }
+
+    this.oddScores = () => {
+        if (scores >= 100){
+            scores -= 100;
+        }
+    }
+}
+
+let Life = function(x,y){
+    this.x = x;
+    this.y = y;
+    this.sprite = 'images/Heart.png';
+
+    this.render = () => {
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 28, 42);
+    }
+
+    this.popLife = () => {
+        allLife.pop();
+    }
 }
 
 // Place all enemy objects in an array called allEnemies
@@ -90,8 +106,9 @@ let allEnemies = [new Enemy(320, 220, 260), new Enemy(120, 140, 60), new Enemy(4
 // Place the player object in a variable called player
 let player = new Player('images/char-cat.png', 200, 340);
 
-let score = new Score(420, 570);
+let score = new Score(425, 570);
 
+let allLife = [new Life(20, 540), new Life(60, 540), new Life(100, 540)];
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
@@ -104,21 +121,3 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
-//funacton to set game timer
-function setGameTimer(){
-    seconds = 0;
-    minutes = 0;
-    time = setInterval(() => {
-        seconds++;
-        
-        if(seconds === 60){
-            minutes++;
-            seconds = 0;
-        } 
-
-        timer.innerHTML = `${minutes} mins ${seconds} sec`;
-    }, 1000);
-}
-
-setGameTimer();

@@ -93,6 +93,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+
         score.update();
     }
 
@@ -159,6 +160,10 @@ var Engine = (function(global) {
             enemy.render();
         });
 
+        allLife.forEach((life) => {
+            life.render();
+        });
+
         player.render();
 
         score.render();
@@ -183,7 +188,7 @@ var Engine = (function(global) {
         'images/enemy-bug.png',
         'images/char-boy.png',
         'images/char-cat.png',
-        'images/Key.png'
+        'images/Heart.png'
     ]);
     Resources.onReady(init);
 
