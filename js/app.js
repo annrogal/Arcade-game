@@ -4,6 +4,8 @@ let minutes = 0;
 let time;
 let timerStart;
 
+let scores = 0;
+
 // Enemies our player must avoid
 let Enemy = function(x, y, speed) {
     // Variables applied to each of our instances go here,
@@ -41,10 +43,6 @@ let Player = function(sprite, x, y) {
     this.x = x;
     this.y = y;
 
-    this.update = () => {
-       
-    }
-
     this.render = () => {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
@@ -58,6 +56,7 @@ let Player = function(sprite, x, y) {
             this.y -= 40;
 
             if(this.y < 40){
+                scores += 100;
                 this.reset();
             }
         }else if(key === 'down' && this.y < 400){
@@ -71,10 +70,27 @@ let Player = function(sprite, x, y) {
     }
 }
 
+var Score = function(x, y){
+    this.x = x;
+    this.y = y;
+    this.score = `Points: ${scores}`;
+
+    this.render = () => {
+        ctx.font = "15px arial";
+        ctx.fillText(this.score, this.x, this.y);
+    }
+
+    this.update = () => {
+        this.score = `Points: ${scores}`;
+    }
+}
+
 // Place all enemy objects in an array called allEnemies
-let allEnemies = [new Enemy(320, 220, 60), new Enemy(120, 140, 60), new Enemy(40, 60, 60)];
+let allEnemies = [new Enemy(320, 220, 260), new Enemy(120, 140, 60), new Enemy(40, 60, 640)];
 // Place the player object in a variable called player
 let player = new Player('images/char-cat.png', 200, 340);
+
+let score = new Score(420, 570);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

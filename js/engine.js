@@ -93,7 +93,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
+        score.update();
     }
 
     function checkCollisions(){
@@ -160,6 +160,8 @@ var Engine = (function(global) {
         });
 
         player.render();
+
+        score.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -180,7 +182,8 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
-        'images/char-cat.png'
+        'images/char-cat.png',
+        'images/Key.png'
     ]);
     Resources.onReady(init);
 
