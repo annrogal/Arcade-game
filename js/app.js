@@ -25,8 +25,7 @@ let Enemy = function(x, y, speed) {
     }
 
     this.checkCollisions = () => {
-        if(parseInt(this.x) === player.x && parseInt(this.y) === player.y){
-            console.log('test');
+        if(parseInt(this.x) >= player.x - 100 && parseInt(this.x) <= player.x + 40 && this.y === player.y){
             player.reset();
             allLife.pop();
             score.oddScores();
@@ -125,12 +124,12 @@ let Life = function(x,y){
     this.sprite = 'images/Heart.png';
 
     this.render = () => {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 28, 42);
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 30, 45);
     }
 }
 
 // Place all enemy objects in an array called allEnemies
-let allEnemies = [new Enemy(320, 220, 260), new Enemy(120, 140, 60), new Enemy(40, 60, 640)];
+let allEnemies = [new Enemy(320, 220, 260), new Enemy(120, 140, 60), new Enemy(40, 60, 400)];
 // Place the player object in a variable called player
 let player = new Player('images/char-cat.png', 200, 340);
 
