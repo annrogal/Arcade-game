@@ -1,6 +1,6 @@
 let scores = 0;
 
-// Enemies our player must avoid
+// Enemy object
 let Enemy = function(x, y, speed) {
     // Variables applied to each of our instances go here,
     this.sprite = 'images/enemy-bug.png';
@@ -33,7 +33,7 @@ let Enemy = function(x, y, speed) {
         }
     }
 };
-
+//Player object
 let Player = function(sprite, x, y) {
     this.sprite = sprite;
     this.x = x;
@@ -96,7 +96,7 @@ let Player = function(sprite, x, y) {
         this.y = 340;
     }
 }
-
+//Score object
 let Score = function(x, y){
     this.x = x;
     this.y = y;
@@ -117,7 +117,7 @@ let Score = function(x, y){
         }
     }
 }
-
+//Life object
 let Life = function(x,y){
     this.x = x;
     this.y = y;
@@ -132,10 +132,11 @@ let Life = function(x,y){
 let allEnemies = [new Enemy(320, 220, 260), new Enemy(120, 140, 60), new Enemy(40, 60, 400)];
 // Place the player object in a variable called player
 let player = new Player('images/char-cat.png', 200, 340);
-
+// Place the score object in a variable called score
 let score = new Score(425, 570);
-
+// Place all life objects in an array called allLife
 let allLife = [new Life(20, 540), new Life(60, 540), new Life(100, 540)];
+
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
