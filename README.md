@@ -6,9 +6,9 @@ This is a simple arcade game with one player, enemies and three life;
 To start the game, visit the website - https://annrogal.github.io/ArcadeGame/ .
 The player moves by arrow keys: up, down, left, right.
 
-In collision with bugs player lose 100 point and one life.
+In collision with bugs player lose 100 points and one life.
 
-If player reach water earn 100 scores. When scores is 500 player win!
+If player reach water earn 100 points. When scores is 500 player win!
 
 ## Source
 
