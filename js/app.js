@@ -8,43 +8,80 @@ let Enemy = function(x, y, speed) {
     this.y = y;
 
     this.speed = speed;
+};
 
-    // Update the enemy's position, required method for game
-    // Parameter: dt, a time delta between ticks
-    this.update = (dt) => {
-        this.x += this.speed * dt;
+Enemy.prototype.update = function(dt) {
+    this.x += this.speed * dt;
 
-        if(this.x > 450){
-            this.x = 0;
-        }
-    }
-
-    // Draw the enemy on the screen, required method for game
-    this.render = () => {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    }
-
-    this.checkCollisions = () => {
-        if(parseInt(this.x) >= player.x - 100 && parseInt(this.x) <= player.x + 40 && this.y === player.y){
-            player.reset();
-            allLife.pop();
-            score.oddScores();
-            player.gameOver();
-        }
+    if(this.x > 450){
+        this.x = 0;
     }
 };
+
+Enemy.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+Enemy.prototype.checkCollisions = function() {
+    if(parseInt(this.x) >= player.x - 100 && parseInt(this.x) <= player.x + 40 && this.y === player.y){
+        player.reset();
+        allLife.pop();
+        score.oddScores();
+        player.gameOver();
+    }
+};
+
 //Player object
 let Player = function(sprite, x, y) {
     this.sprite = sprite;
     this.x = x;
     this.y = y;
+}
 
-    this.render = () => {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+Player.prototype.reset = function() {
+    this.x = 200;
+    this.y = 340;
+};
+
+Player.prototype.handleInput = function(key) {
+    if(key === 'left' && this.x > 0 ){
+        this.x -= 40;
+    }else if(key === 'right' && this.x < 400){
+        this.x += 40;
+    }else if(key === 'up' && this.y > 0){
+        this.y -= 40;
+
+        if(this.y < 40){
+            scores += 100;
+            player.gameWin();
+            this.reset();
+        }
+    }else if(key === 'down' && this.y < 400){
+        this.y += 40;
     }
+};
 
-    this.gameOver = () => {
-        if(allLife.length !== 0) return;
+Player.prototype.gameWin = function() {
+    if(scores !== 500) return;
+
+    swal({
+        title: "Congratulations!",
+        text: "You earnd 500 scores",
+        type: "success",
+        confirmButtonText: "Play again!"
+    }).then(function(isConfirm) {
+        if (isConfirm) {
+            window.location.reload(true);
+        }     
+    })  
+};
+
+Player.prototype.gameOver = function() {
+    if(allLife.length !== 0) return;
 
         swal({
             title: "Game over!",
@@ -56,78 +93,40 @@ let Player = function(sprite, x, y) {
                 window.location.reload(true);
             }     
         })
-    }
+};
 
-    this.gameWin = () => {
-        if(scores !== 500) return;
-
-        swal({
-            title: "Congratulations!",
-            text: "You earnd 500 scores",
-            type: "success",
-            confirmButtonText: "Play again!"
-        }).then(function(isConfirm) {
-            if (isConfirm) {
-                window.location.reload(true);
-            }     
-        })  
-    }
-
-    this.handleInput = (key) => {
-        if(key === 'left' && this.x > 0 ){
-            this.x -= 40;
-        }else if(key === 'right' && this.x < 400){
-            this.x += 40;
-        }else if(key === 'up' && this.y > 0){
-            this.y -= 40;
-
-            if(this.y < 40){
-                scores += 100;
-                player.gameWin();
-                this.reset();
-            }
-        }else if(key === 'down' && this.y < 400){
-            this.y += 40;
-        }
-    }
-
-    this.reset = () => {
-        this.x = 200;
-        this.y = 340;
-    }
-}
 //Score object
 let Score = function(x, y){
     this.x = x;
     this.y = y;
     this.score = `Points: ${scores}`;
-
-    this.render = () => {
-        ctx.font = "15px arial";
-        ctx.fillText(this.score, this.x, this.y);
-    }
-
-    this.update = () => {
-        this.score = `Points: ${scores}`;
-    }
-
-    this.oddScores = () => {
-        if (scores >= 100){
-            scores -= 100;
-        }
-    }
 }
+
+Score.prototype.render = function() {
+    ctx.font = "15px arial";
+    ctx.fillText(this.score, this.x, this.y);
+};
+
+Score.prototype.update = function() {
+    this.score = `Points: ${scores}`;
+};
+
+Score.prototype.oddScores = function() {
+    if (scores >= 100){
+        scores -= 100;
+    }
+};
+
 //Life object
 let Life = function(x,y){
     this.x = x;
     this.y = y;
     this.sprite = 'images/Heart.png';
+};
 
-    this.render = () => {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 30, 45);
-    }
-}
-
+Life.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 30, 45);
+};
 // Place all enemy objects in an array called allEnemies
 let allEnemies = [new Enemy(320, 220, 260), new Enemy(120, 140, 60), new Enemy(40, 60, 400)];
 // Place the player object in a variable called player
